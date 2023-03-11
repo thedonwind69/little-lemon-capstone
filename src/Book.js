@@ -1,10 +1,9 @@
 import { useEffect, useState, useReducer } from "react";
-import {seededRandom, fetchAPI, submitAPI} from './booking_api'
+import {fetchAPI, submitAPI} from './booking_api'
 import { useNavigate } from "react-router-dom";
 
 function Book () {
-
-
+    
     var [timesState, setTimesState] = useState();
     var [selectedTime, setSelectedTime] = useState();
     var [numberofguests, setNumberOfGuests] = useState();
@@ -22,8 +21,15 @@ function Book () {
         };
         var confirmMessage = window.confirm("are you sure you would like to book this reservation?");
         if (confirmMessage) {
+            var dataKeysArray = Object.keys(formData);
+            if (dataKeysArray.some((key) => !formData[key])) {
+                alert("Your form is missing required fields.");
+                return;
+            }
             if (submitAPI(formData)) {
                 navigate("/confirmation");
+            } else {
+                alert("There was an error in your submission");
             }
         }
     }
